@@ -1,4 +1,4 @@
-package sort
+package main
 
 import "fmt"
 
@@ -12,25 +12,29 @@ func quickSort(nums []int, begin, end int) {
 	if begin > end {
 		return
 	}
-	pivot := begin
-	i := pivot + 1
+	pivot := partition(nums, begin, end)
+	quickSort(nums, begin, pivot-1)
+	quickSort(nums, pivot+1, end)
 
-	for j := begin; j <= end; j++ {
+}
+
+func partition(nums []int, begin, end int) int {
+	pivot := end
+	i := begin
+
+	for j := begin; j < end; j++ {
 		if nums[j] < nums[pivot] {
 			nums[j], nums[i] = nums[i], nums[j]
 			i++
 		}
 	}
+	nums[i], nums[pivot] = nums[pivot], nums[i]
 
-	nums[i-1], nums[pivot] = nums[pivot], nums[i-1]
-
-	quickSort(nums, begin, i-2)
-	quickSort(nums, i, end)
-
+	return i
 }
 
 func main() {
 	nums := []int{9, 8, 6, 7, 4, 5, 1, 3, 2}
-	quickSort(nums,0,len(nums)-1)
+	quickSort(nums, 0, len(nums)-1)
 	fmt.Println(nums)
 }
